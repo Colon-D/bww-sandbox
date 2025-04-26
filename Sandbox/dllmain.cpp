@@ -44,13 +44,57 @@ __int64 __fastcall hook_set_sound_driver_category_volume(
 	);
 }
 
+constexpr std::int32_t costume_locked{ -1 };
+std::int32_t get_costume_count(
+	const std::uint64_t game, const std::uint8_t costume_index
+) {
+	const auto* const costume_counts =
+		*reinterpret_cast<std::uint32_t**>(game + 0x1F8);
+	return costume_counts[costume_index];
+}
+
+uint64_t orig_get_costume_count;
+bool infinite_costumes{};
+bool unlock_all_costumes{};
+std::int64_t __fastcall hook_get_costume_count(
+	const std::uint64_t game, const std::uint8_t costume_index
+) {
+	auto costume_count = get_costume_count(game, costume_index);
+	if (unlock_all_costumes and costume_count == costume_locked) {
+		costume_count = 0;
+	}
+	if (infinite_costumes and costume_count == 0) {
+		costume_count = 1;
+	}
+	return costume_count;
+}
+
+uint64_t orig_decrement_costume_count;
+std::uint32_t* __fastcall hook_decrement_costume_count(
+	const std::uint64_t game, const std::uint8_t costume_index
+) {
+	auto* const costume_counts =
+		*reinterpret_cast<std::uint32_t**>(game + 0x1F8);
+	const auto costume_count = costume_counts[costume_index];
+	if (
+		infinite_costumes
+		and (costume_count == 0 or costume_count == costume_locked)
+	) {
+		return costume_counts;
+	}
+	--costume_counts[costume_index];
+	return costume_counts;
+}
+
 class Sandbox : public RC::CppUserModBase {
 public:
 	std::unique_ptr<PLH::x64Detour> detour_set_sound_driver_category_volume;
+	std::unique_ptr<PLH::x64Detour> detour_get_costume_count;
+	std::unique_ptr<PLH::x64Detour> detour_decrement_costume_count;
 
 	Sandbox() : CppUserModBase() {
 		ModName = STR("Sandbox");
-		ModVersion = STR("0.2.0");
+		ModVersion = STR("0.2.1");
 		ModDescription = STR("Where is this Description used?");
 		ModAuthors = STR("Lily");
 		// Do not change this unless you want to target a UE4SS version
@@ -62,6 +106,21 @@ public:
 		
 		// config dependant code is set in on_lua_start()'s on_config_loaded().
 		// this is called after the main lua script has loaded config.lua
+
+		detour_get_costume_count =
+			std::make_unique<PLH::x64Detour>(
+				std::uint64_t{ base_offset + 0x1146530 },
+				reinterpret_cast<std::uint64_t>(hook_get_costume_count),
+				&orig_get_costume_count
+			);
+		detour_get_costume_count->hook();
+		detour_decrement_costume_count =
+			std::make_unique<PLH::x64Detour>(
+				std::uint64_t{ base_offset + 0x114A4A0 },
+				reinterpret_cast<std::uint64_t>(hook_decrement_costume_count),
+				&orig_decrement_costume_count
+			);
+		detour_decrement_costume_count->hook();
 
 		detour_set_sound_driver_category_volume =
 			std::make_unique<PLH::x64Detour>(
@@ -95,13 +154,9 @@ public:
 			RC::UE4SSProgram::get_program().get_mods_directory()
 			+ STR("\\Sandbox\\config.lua");
 
-		lua["on_config_loaded"] = [](const sol::table& config) {
-			if (config["infinite_costumes"]) {
-				// NOP costume decrement
-				write(0x114A4AA, std::array{ nop, nop, nop });
-				// Don't increment above 1
-				write<std::uint8_t>(0x11435AC + 0x2, 1);
-			}
+		lua["on_config_loaded"] = [&](const sol::table& config) {
+			infinite_costumes = config["infinite_costumes"];
+			unlock_all_costumes = config["unlock_all_costumes"];
 
 			const sol::table& lua_volume_multipliers
 				= config["volume_multipliers"];
