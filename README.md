@@ -11,16 +11,16 @@ Proof of concept mod for Balan Wonderworld.
         - Dusk Butterfly: Can jump forever by spamming force jump.
         - Pounding Pig: Can jump forever by force jumping as soon as ground pounding.
         - Jumping Jack: Can double jump by jumping whilst fluttering.
-- 🆕 Volume multipliers:
+- 🆕 Volume multipliers in configuration file:
   - Can now 100% mute Music, Sound Effects, and/or Voices
   - Subcategories of Music, Sound Effects, and Voices can be changed too
 
 Installation Instructions
 ---
-Unzip [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS/releases/download/experimental-latest/UE4SS_v3.0.1-394-g437a8ff.zip) into `BALAN WONDERWORLD/Happiness/Binaries/Win64/`.
-Unzip [Sandbox](https://github.com/Colon-D/bww-sandbox/releases/latest/download/Sandbox.zip) into `ue4ss/Mods/`.
-Ingame, manually rebind "Jump/Costume Ability" from "Space Bar":
-- Settings -> Controls -> Keyboard Configuration
+- Unzip [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS/releases/download/experimental-latest/UE4SS_v3.0.1-394-g437a8ff.zip) into `BALAN WONDERWORLD/Happiness/Binaries/Win64/`.
+- Unzip [Sandbox](https://github.com/Colon-D/bww-sandbox/releases/latest/download/Sandbox.zip) into `ue4ss/Mods/`.
+- Ingame, manually rebind "Jump/Costume Ability" from "Space Bar":
+  - Settings -> Controls -> Keyboard Configuration
 
 Configuration Instructions
 ---

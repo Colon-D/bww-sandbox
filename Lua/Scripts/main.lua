@@ -9,7 +9,7 @@ local function force_jump()
 	end
 end
 
--- read config file (config_filepath set by C++)
+-- read config file (config_filepath and on_config_loaded set by C++)
 local config = { Key = Key }
 local f, err = loadfile(config_filepath, "t", config)
 if f then
