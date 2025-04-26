@@ -1,8 +1,17 @@
 local UEHelpers = require("UEHelpers")
 
--- read config file (get_config_filepath and set_config set by C++)
+-- force jump on keybind
+local function force_jump()
+	local player = UEHelpers:GetPlayerController().Pawn
+	-- CanJump needs dll to be forced to work with all costumes
+	if player ~= nil and player.CanJump() then
+		player.Jump()
+	end
+end
+
+-- read config file (config_filepath set by C++)
 local config = { Key = Key }
-local f, err = loadfile(get_config_filepath(), "t", config)
+local f, err = loadfile(config_filepath, "t", config)
 if f then
 	f()
 else
@@ -14,16 +23,8 @@ else
 	print("###############################")
 	return
 end
-set_config(config)
 
--- force jump on keybind
-local function force_jump()
-	local player = UEHelpers:GetPlayerController().Pawn
-	-- CanJump needs dll to be forced to work with all costumes
-	if player ~= nil and player.CanJump() then
-		player.Jump()
-	end
-end
+on_config_loaded(config)
 
 for _, key in ipairs(config.force_jump_keys) do
 	RegisterKeyBind(key, force_jump)

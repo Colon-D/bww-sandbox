@@ -11,6 +11,9 @@ Proof of concept mod for Balan Wonderworld.
         - Dusk Butterfly: Can jump forever by spamming force jump.
         - Pounding Pig: Can jump forever by force jumping as soon as ground pounding.
         - Jumping Jack: Can double jump by jumping whilst fluttering.
+- 🆕 Volume multipliers:
+  - Can now 100% mute Music, Sound Effects, and/or Voices
+  - Subcategories of Music, Sound Effects, and Voices can be changed too
 
 Installation Instructions
 ---
@@ -26,6 +29,8 @@ Infinite costume uses can be disabled in `Sandbox\config.lua`.
 - Set `infinite_costumes` to `false`.
 If you want Gamepad binds, use Steam Input's Controller Configurator to bind a Gamepad button to a bound Keyboard key, like "Space Bar".
 - Note this will affect other uses of that button, like the UI.
+Volume Multipliers can be set between [0.0, 1.0].
+- Volume Multipliers multiply together. Setting ingame Music to 5 (50% volume), and the config's Music to 0.5 (a further 50% of that volume) will result in 25% volume total.
 
 ---
 
@@ -39,6 +44,6 @@ Compilation Instructions
   - https://docs.ue4ss.com/dev/guides/installing-a-c++-mod.html:
     - 1
     - 2 (`main.dll` in `.\Binaries\<Configuration>\Sandbox`)
-    - 3 (`Mods\Sandbox\dlls\main.dll`)
-- Copy the contents of `.\Lua\` to `Mods\Sandbox\`
+    - 3 (`Mods\Sandbox\dlls\main.dll`). Alternatively, a Symbolic Link negates the need to copy after every build.
+- Copy the contents of `.\Lua\` to `Mods\Sandbox\`, or create Symbolic Links.
 - Create an empty file named `enabled.txt` in `Mods\Sandbox\`.

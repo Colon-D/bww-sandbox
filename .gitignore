@@ -2,3 +2,7 @@
 vsxmake2022/
 Intermediates/
 Binaries/
+
+# ignored as I create a symbolic link and use this for my own gameplay,
+# of which my values differ from default, and I don't want to commit that
+Lua/config.lua
