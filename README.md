@@ -25,11 +25,14 @@ Ingame, manually rebind "Jump/Costume Ability" from "Space Bar":
 Configuration Instructions
 ---
 Force Jump can be configured to different keys in `Sandbox\config.lua`.
+
 Infinite costume uses can be disabled in `Sandbox\config.lua`.
 - Set `infinite_costumes` to `false`.
 If you want Gamepad binds, use Steam Input's Controller Configurator to bind a Gamepad button to a bound Keyboard key, like "Space Bar".
 - Note this will affect other uses of that button, like the UI.
-Volume Multipliers can be set between [0.0, 1.0].
+
+Volume Multipliers uses can be set in `Sandbox\config.lua`.
+- Volume Multipliers should be set between [0.0, 1.0].
 - Volume Multipliers multiply together. Setting ingame Music to 5 (50% volume), and the config's Music to 0.5 (a further 50% of that volume) will result in 25% volume total.
 
 ---
