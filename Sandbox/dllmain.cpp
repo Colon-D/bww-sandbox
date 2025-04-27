@@ -22,7 +22,21 @@ void write(const std::uint64_t offset, const type value) {
 	VirtualProtect(address, sizeof(type), old_protect, &new_protect);
 }
 
-uint64_t orig_set_sound_driver_category_volume;
+// macros to make code a bit shorter for detours.
+// requires the original function to be stored as `std::uint64_t orig_FN_NAME`,
+// and the replacement function to be stored as `FN_SIGNATURE hook_FN_NAME`,
+// and the detour object to be stored as `detour detour_FN_NAME`
+#define hook(function_name, offset)\
+	detour_##function_name = std::make_unique<PLH::x64Detour>(\
+		std::uint64_t{ base_offset + offset },\
+		reinterpret_cast<std::uint64_t>(hook_##function_name),\
+		&orig_##function_name\
+	)
+#define orig(function_name)\
+	PLH::FnCast(orig_##function_name, hook_##function_name)
+using detour = std::unique_ptr<PLH::x64Detour>;
+
+std::uint64_t orig_set_sound_driver_category_volume{};
 std::unordered_map<std::string, float> volume_multipliers{};
 __int64 __fastcall hook_set_sound_driver_category_volume(
 	const __int64 sound_driver_category,
@@ -36,10 +50,7 @@ __int64 __fastcall hook_set_sound_driver_category_volume(
 
 	volume *= volume_multipliers.at(sound_driver_category_name);
 
-	return PLH::FnCast(
-		orig_set_sound_driver_category_volume, 
-		&hook_set_sound_driver_category_volume
-	)(
+	return orig(set_sound_driver_category_volume)(
 		sound_driver_category, volume, a3, a4
 	);
 }
@@ -53,7 +64,7 @@ std::int32_t get_costume_count(
 	return costume_counts[costume_index];
 }
 
-uint64_t orig_get_costume_count;
+std::uint64_t orig_get_costume_count{};
 bool infinite_costumes{};
 bool unlock_all_costumes{};
 std::int64_t __fastcall hook_get_costume_count(
@@ -69,7 +80,7 @@ std::int64_t __fastcall hook_get_costume_count(
 	return costume_count;
 }
 
-uint64_t orig_decrement_costume_count;
+std::uint64_t orig_decrement_costume_count{};
 std::uint32_t* __fastcall hook_decrement_costume_count(
 	const std::uint64_t game, const std::uint8_t costume_index
 ) {
@@ -88,9 +99,9 @@ std::uint32_t* __fastcall hook_decrement_costume_count(
 
 class Sandbox : public RC::CppUserModBase {
 public:
-	std::unique_ptr<PLH::x64Detour> detour_set_sound_driver_category_volume;
-	std::unique_ptr<PLH::x64Detour> detour_get_costume_count;
-	std::unique_ptr<PLH::x64Detour> detour_decrement_costume_count;
+	detour detour_set_sound_driver_category_volume;
+	detour detour_get_costume_count;
+	detour detour_decrement_costume_count;
 
 	Sandbox() : CppUserModBase() {
 		ModName = STR("Sandbox");
@@ -107,30 +118,9 @@ public:
 		// config dependant code is set in on_lua_start()'s on_config_loaded().
 		// this is called after the main lua script has loaded config.lua
 
-		detour_get_costume_count =
-			std::make_unique<PLH::x64Detour>(
-				std::uint64_t{ base_offset + 0x1146530 },
-				reinterpret_cast<std::uint64_t>(hook_get_costume_count),
-				&orig_get_costume_count
-			);
-		detour_get_costume_count->hook();
-		detour_decrement_costume_count =
-			std::make_unique<PLH::x64Detour>(
-				std::uint64_t{ base_offset + 0x114A4A0 },
-				reinterpret_cast<std::uint64_t>(hook_decrement_costume_count),
-				&orig_decrement_costume_count
-			);
-		detour_decrement_costume_count->hook();
-
-		detour_set_sound_driver_category_volume =
-			std::make_unique<PLH::x64Detour>(
-				std::uint64_t{ base_offset + 0x34C77E0 },
-				reinterpret_cast<std::uint64_t>(
-					hook_set_sound_driver_category_volume
-				),
-				&orig_set_sound_driver_category_volume
-			);
-		detour_set_sound_driver_category_volume->hook();
+		hook(get_costume_count, 0x1146530);
+		hook(decrement_costume_count, 0x114A4A0);
+		hook(set_sound_driver_category_volume, 0x34C77E0);
 
 		// force CanJump to work on ground on forced Jumps for ALL costumes
 		write(0x2A5970A, std::array{ nop, nop, nop, nop, nop, nop });
