@@ -1,8 +1,8 @@
 Proof of concept mod for Balan Wonderworld.
 - Infinite costume uses:
   - If costume count is 0, it is treated as if it is 1
-- 🆕 Unlock All Costumes (disabled by default):
-  - If costume is locked, it is treated as if it is unlocked with 0 costumes
+  - Unlock All Costumes (disabled by default):
+    - If costume is locked, it is treated as if it is unlocked with 0 costumes
 - Enables a buggy Force Jump key on "Space Bar", "Caps Lock" and "Right Click":
   - 🐞 Bugs:
     - Only full jumps
@@ -12,6 +12,7 @@ Proof of concept mod for Balan Wonderworld.
         - Dusk Butterfly: Can jump forever by spamming force jump.
         - Pounding Pig: Can jump forever by force jumping as soon as ground pounding.
         - Jumping Jack: Can double jump by jumping whilst fluttering.
+  - 🆕 Config for Infinite Jumps cheat, that lets you jump forever and ever.
 - Volume multipliers in configuration file:
   - Can now 100% mute Music, Sound Effects, and/or Voices
   - Subcategories of Music, Sound Effects, and Voices can be changed too
@@ -34,6 +35,7 @@ Unlock all costumes can be enabled in `Sandbox\config.lua`.
 Force Jump can be configured to different keys in `Sandbox\config.lua`.
 - If you want Gamepad binds, use Steam Input's Controller Configurator to bind a Gamepad button to a bound Keyboard key, like "Space Bar".
 - Note this will affect other uses of that button, like the UI.
+- Infinite Jumps can be enabled by setting `infinite_jumps` to `true`
 
 Volume Multipliers uses can be set in `Sandbox\config.lua`.
 - Volume Multipliers should be set between [0.0, 1.0].

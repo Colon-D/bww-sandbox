@@ -105,7 +105,7 @@ public:
 
 	Sandbox() : CppUserModBase() {
 		ModName = STR("Sandbox");
-		ModVersion = STR("0.2.1");
+		ModVersion = STR("0.2.2");
 		ModDescription = STR("Where is this Description used?");
 		ModAuthors = STR("Lily");
 		// Do not change this unless you want to target a UE4SS version
