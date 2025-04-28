@@ -31,7 +31,8 @@ void write(const std::uint64_t offset, const type value) {
 		std::uint64_t{ base_offset + offset },\
 		reinterpret_cast<std::uint64_t>(hook_##function_name),\
 		&orig_##function_name\
-	)
+	);\
+	detour_##function_name->hook()
 #define orig(function_name)\
 	PLH::FnCast(orig_##function_name, hook_##function_name)
 using detour = std::unique_ptr<PLH::x64Detour>;
