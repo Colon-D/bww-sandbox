@@ -98,15 +98,30 @@ std::uint32_t* __fastcall hook_decrement_costume_count(
 	return costume_counts;
 }
 
+std::uint64_t orig_set_frame_rate{};
+bool custom_frame_rate{};
+std::int32_t frame_rate{};
+std::int64_t __fastcall hook_set_frame_rate(
+	std::int64_t a1, const wchar_t* frame_rate_string, std::uint32_t a3
+) {
+	static std::wstring replacement_frame_rate_string{};
+	if (custom_frame_rate) {
+		replacement_frame_rate_string = std::to_wstring(frame_rate);
+		frame_rate_string = replacement_frame_rate_string.c_str();
+	}
+	return orig(set_frame_rate)(a1, frame_rate_string, a3);
+}
+
 class Sandbox : public RC::CppUserModBase {
 public:
 	detour detour_set_sound_driver_category_volume;
 	detour detour_get_costume_count;
 	detour detour_decrement_costume_count;
+	detour detour_set_frame_rate;
 
 	Sandbox() : CppUserModBase() {
 		ModName = STR("Sandbox");
-		ModVersion = STR("0.2.2");
+		ModVersion = STR("0.3.0");
 		ModDescription = STR("Where is this Description used?");
 		ModAuthors = STR("Lily");
 		// Do not change this unless you want to target a UE4SS version
@@ -122,6 +137,7 @@ public:
 		hook(get_costume_count, 0x1146530);
 		hook(decrement_costume_count, 0x114A4A0);
 		hook(set_sound_driver_category_volume, 0x34C77E0);
+		hook(set_frame_rate, 0x1321A40);
 
 		// force CanJump to work on ground on forced Jumps for ALL costumes
 		write(0x2A5970A, std::array{ nop, nop, nop, nop, nop, nop });
@@ -156,6 +172,9 @@ public:
 					{ key.as<std::string>(), value.as<float>() }
 				);
 			}
+
+			custom_frame_rate = config["custom_frame_rate"];
+			frame_rate = config["frame_rate"];
 		};
 	}
 };

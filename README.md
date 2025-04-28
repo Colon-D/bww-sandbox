@@ -12,7 +12,10 @@ Proof of concept mod for Balan Wonderworld.
         - Dusk Butterfly: Can jump forever by spamming force jump.
         - Pounding Pig: Can jump forever by force jumping as soon as ground pounding.
         - Jumping Jack: Can double jump by jumping whilst fluttering.
-  - 🆕 Config for Infinite Jumps cheat, that lets you jump forever and ever.
+  - Config for Infinite Jumps cheat, that lets you jump forever and ever.
+- 🆕 Custom Frame Rate:
+  - Can be used to set the frame rate to values other than 30 or 60.
+  - By default it is set to 0 (Unlimited)
 - Volume multipliers in configuration file:
   - Can now 100% mute Music, Sound Effects, and/or Voices
   - Subcategories of Music, Sound Effects, and Voices can be changed too
@@ -35,7 +38,10 @@ Unlock all costumes can be enabled in `Sandbox\config.lua`.
 Force Jump can be configured to different keys in `Sandbox\config.lua`.
 - If you want Gamepad binds, use Steam Input's Controller Configurator to bind a Gamepad button to a bound Keyboard key, like "Space Bar".
 - Note this will affect other uses of that button, like the UI.
-- Infinite Jumps can be enabled by setting `infinite_jumps` to `true`
+- Infinite Jumps can be enabled by setting `infinite_jumps` to `true`.
+
+Custom Frame Rate can be toggled in `Sandbox\config.lua`.
+- A specific frame rate can be set by changing `frame_rate`.
 
 Volume Multipliers uses can be set in `Sandbox\config.lua`.
 - Volume Multipliers should be set between [0.0, 1.0].

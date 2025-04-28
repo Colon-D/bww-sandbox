@@ -4,9 +4,13 @@ force_jump_keys = {
 	Key.CAPS_LOCK,
 	Key.RIGHT_MOUSE_BUTTON,
 }
+infinite_jumps = false
 
 infinite_costumes = true
 unlock_all_costumes = false
+
+custom_frame_rate = true
+frame_rate = 0 -- 0: unlimited
 
 volume_multipliers = {
 	-- Music
