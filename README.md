@@ -22,7 +22,7 @@ Proof of concept mod for Balan Wonderworld.
 
 Installation Instructions
 ---
-- Unzip [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS/releases/download/experimental-latest/UE4SS_v3.0.1-394-g437a8ff.zip) into `BALAN WONDERWORLD/Happiness/Binaries/Win64/`.
+- Unzip [UE4SS](https://github.com/UE4SS-RE/RE-UE4SS/releases/download/experimental/UE4SS_v3.0.1-394-g437a8ff.zip) into `BALAN WONDERWORLD/Happiness/Binaries/Win64/`.
 - Unzip [Sandbox](https://github.com/Colon-D/bww-sandbox/releases/latest/download/Sandbox.zip) into `ue4ss/Mods/`.
 - Ingame, manually rebind "Jump/Costume Ability" from "Space Bar":
   - Settings -> Controls -> Keyboard Configuration
